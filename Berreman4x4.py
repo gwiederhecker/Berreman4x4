@@ -1,4 +1,4 @@
-# Encoding: utf-8
+# Encodin: utf-8
 
 # Copyright (C) 2012-2016 Olivier Castany
 # This program is free software (see LICENCE file)
@@ -458,12 +458,14 @@ def hs_propagator_Pade(Delta, h, k0, q=7):
     P_hs_Pade(h)·P_hs_Pade(-h) = 1. 
     Such property may be suitable for use with Z. Lu's method.
     """
-    P_hs_Pade = scipy.linalg.expm(1j * h * k0 * Delta, q)
+    #P_hs_Pade = scipy.linalg.expm(1j * h * k0 * Delta, q)
+    P_hs_Pade = scipy.linalg.expm(1j * h * k0 * Delta)
     return numpy.matrix(P_hs_Pade)
 
 def hs_propagator_Taylor(Delta, h, k0, q=5):
     """Returns propagator using Taylor series of order 'q'."""
-    P_hs_Taylor = scipy.linalg.expm3(1j * h * k0 * Delta, q+1)
+    #P_hs_Taylor = scipy.linalg.expm3(1j * h * k0 * Delta, q+1)
+    P_hs_Taylor = scipy.linalg.expm(1j * h * k0 * Delta)
     # 'q+1' to correct SciPy bug 1687
     return numpy.matrix(P_hs_Taylor)
 
@@ -473,12 +475,12 @@ def hs_propagator_eig(Delta, h, k0, q=None):
     'q' is swallowed. It is here so as to offer the same protoype as 
     the other hs_propagator_*() functions.
 
-    The calculation is (see scipy.linalg.expm2() source code):
+    The calculation is (see scipy.linalg.expm() source code):
         s,vr = eig()    # eigenvalues, eigenvector array
         vri = inv(vr)   # eigenvector array inversion
         result = vr * diag(exp(s)) * vri
     """
-    P_hs = scipy.linalg.expm2(1j * h * k0 * Delta)
+    P_hs = scipy.linalg.expm(1j * h * k0 * Delta)
     return numpy.matrix(P_hs)
 
 
@@ -1685,7 +1687,8 @@ class _TwistedLayer:
         # Name AP : A for "alpha", P for "propagation matrix"
         left_idx = Deltas.shape[:-2]  
                 # left indices of array Deltas : (alpha,Kx)
-        ap = [ [ scipy.linalg.expm(1j * k_0 * Deltas[i] * dz, q=3)
+        #ap = [ [ scipy.linalg.expm(1j * k_0 * Deltas[i] * dz, q=3)
+        ap = [ [ scipy.linalg.expm(1j * k_0 * Deltas[i] * dz)
                  for k_0 in k0 ]
                for i in numpy.ndindex(left_idx) ]
         AP = numpy.array(ap)            # shape : (prod(left_idx),k0,4,4)
