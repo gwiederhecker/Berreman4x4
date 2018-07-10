@@ -459,6 +459,7 @@ def hs_propagator_Pade(Delta, h, k0, q=7):
     Such property may be suitable for use with Z. Lu's method.
     """
     #P_hs_Pade = scipy.linalg.expm(1j * h * k0 * Delta, q)
+    #test
     P_hs_Pade = scipy.linalg.expm(1j * h * k0 * Delta)
     return numpy.matrix(P_hs_Pade)
 
